@@ -1,244 +1,144 @@
-# 02. ROS2 Turtlesim Control
+# ROS2 Practice
 
-## 1. Objective
+A collection of hands-on ROS2 exercises using **Python**, developed to understand ROS2 communication, node control, and robot application development step by step.
 
-This practice focuses on controlling a simulated robot using ROS2 Jazzy and Python, applying the Publisher and Subscriber concepts learned in the previous practice.
+The repository focuses on implementing, running, and verifying ROS2 programs rather than studying concepts alone. Each practice is organized independently and will be expanded as new topics are covered.
 
-The main objectives are:
+## Development Environment
 
-- Understand how to launch and operate the Turtlesim simulator.
-- Control a simulated turtle using keyboard commands.
-- Implement a custom Python Publisher for robot motion control.
-- Understand linear and angular velocities using `geometry_msgs/msg/Twist`.
-- Generate circular trajectories by combining linear and angular velocity.
-- Implement a custom Subscriber to monitor the turtle's position and orientation.
-- Analyze ROS2 communication using command-line tools and `rqt_graph`.
+| Component | Version / Tool |
+| --- | --- |
+| Operating System | Ubuntu 24.04 LTS |
+| ROS2 Distribution | Jazzy Jalisco |
+| Programming Language | Python 3.12 |
+| ROS2 Python Library | `rclpy` |
+| Editor | Visual Studio Code |
+| Terminal | Bash |
 
-## 2. Development Environment
+## Practice Overview
 
-- **OS:** Ubuntu 24.04 LTS
-- **ROS2 Distribution:** Jazzy Jalisco
-- **Language:** Python 3.12
-- **Libraries:** `rclpy`, `geometry_msgs`, `turtlesim`
-- **Simulator:** Turtlesim
+| No. | Practice | Main Concepts |
+| --- | --- | --- |
+| 01 | [Publisher & Subscriber](01_publisher_subscriber/) | Topics, messages, publishers, subscribers, callbacks |
+| 02 | [Turtlesim Control](02_turtlesim_control/) | `Twist`, `Pose`, turtle movement and feedback |
+| 03 | [Service & Client](03_service_client/) | Service servers, clients, requests, responses, Turtlesim teleportation |
+| 04 | [ROS2 Parameters](04_ros2_parameters/) | Parameter declaration, runtime updates, velocity control |
+| 05 | [ROS2 Launch Files](05_launch_file/) | Python launch files, namespaces, remapping, multiple nodes |
 
-### Required Package
+More practices will be added as the project progresses.
 
-If Turtlesim is not installed, install it using:
-
-```bash
-sudo apt update
-sudo apt install ros-jazzy-turtlesim
-```
-
-## 3. Project Structure
+## Project Structure
 
 ```text
-02_turtlesim_control/
-├── turtle_controller.py
-├── turtle_pose.py
-└── README.md
+ros2_practice/
+├── README.md
+├── 01_publisher_subscriber/
+│   ├── publisher.py
+│   ├── subscriber.py
+│   ├── README.md
+│   └── CODE_WALKTHROUGH.md
+├── 02_turtlesim_control/
+│   ├── turtle_controller.py
+│   ├── turtle_pose.py
+│   ├── README.md
+│   └── CODE_WALKTHROUGH.md
+├── 03_service_client/
+│   ├── service_server.py
+│   ├── service_client.py
+│   ├── turtle_teleport.py
+│   ├── README.md
+│   └── CODE_WALKTHROUGH.md
+├── 04_ros2_parameters/
+│   └── parameter_turtle_controller.py
+└── 05_launch_file/
+    └── launch/
+        └── turtlesim_mimic.launch.py
 ```
 
-| File | Description |
-|---|---|
-| `turtle_controller.py` | Publishes velocity commands to move the turtle automatically |
-| `turtle_pose.py` | Subscribes to and displays the turtle's position and orientation |
-| `README.md` | Documentation for this practice |
+Each practice may include two documentation files:
 
-## 4. ROS2 Turtlesim Overview
+- **`README.md`** — A concise English guide covering the objective, implementation, and execution steps.
+- **`CODE_WALKTHROUGH.md`** — A detailed Korean explanation of the actual Python source code, including syntax, ROS2 APIs, callbacks, and execution flow.
 
-Turtlesim is a lightweight 2D robot simulator provided for learning fundamental ROS2 concepts.
+## Practice Highlights
 
-It allows users to control a virtual turtle and observe its position, orientation, and movement trajectory.
+### 01 — Publisher & Subscriber
 
-### 4.1 Main Components
+Implemented Python nodes that exchange messages through a ROS2 topic. Learned how publishers, subscribers, message types, and callback functions work together.
 
-This practice uses three ROS2 nodes:
+### 02 — Turtlesim Control
 
-| Node | Role |
-|---|---|
-| `/turtlesim` | Simulates the turtle's movement and publishes its current state |
-| `/turtle_controller` | Publishes velocity commands to control the turtle |
-| `/turtle_pose_reader` | Subscribes to the turtle's position and orientation |
+Used Python nodes to command a simulated turtle and observe its pose. Practiced velocity commands and feedback through ROS2 topics.
 
-The default keyboard teleoperation node is also used during manual control.
+### 03 — Service & Client
 
-### 4.2 ROS2 Topics
+Implemented a service server and client for request-response communication. Also explored Turtlesim's teleportation service to control a turtle through a service call.
 
-Two main topics are used:
+### 04 — ROS2 Parameters
 
-| Topic | Message Type | Purpose |
-|---|---|---|
-| `/turtle1/cmd_vel` | `geometry_msgs/msg/Twist` | Sends linear and angular velocity commands |
-| `/turtle1/pose` | `turtlesim/msg/Pose` | Provides the current position and orientation |
+Implemented a Turtlesim controller with configurable linear and angular speeds. Practiced changing parameters at runtime and validating parameter values.
 
-The controller publishes commands to `/turtle1/cmd_vel`, while the simulator publishes the turtle's pose to `/turtle1/pose`.
+### 05 — ROS2 Launch Files
 
-## 5. Keyboard Control
+Created a Python launch file to start two namespaced Turtlesim nodes and a mimic node together. Practiced namespaces, topic remapping, and node parameters in a multi-node application.
 
-Before implementing a custom controller, the turtle can be controlled using the keyboard teleoperation node provided by Turtlesim.
+## Getting Started
 
-### 5.1 Start Turtlesim
-
-**Terminal 1**
+### 1. Set up the ROS2 environment
 
 ```bash
 source /opt/ros/jazzy/setup.bash
 export ROS_DOMAIN_ID=13
-
-ros2 run turtlesim turtlesim_node
 ```
 
-A simulator window appears with a turtle at approximately the center of the screen.
+The domain ID above is the value used for these exercises. Communicating ROS2 processes must use compatible domain settings.
 
-### 5.2 Start Keyboard Teleoperation
-
-**Terminal 2**
+### 2. Clone the repository
 
 ```bash
-source /opt/ros/jazzy/setup.bash
-export ROS_DOMAIN_ID=13
-
-ros2 run turtlesim turtle_teleop_key
+git clone https://github.com/kwwmm/ros2-practice.git
+cd ros2-practice
 ```
 
-The terminal must have keyboard focus for the controls to work.
+### 3. Run a practice
 
-### 5.3 Keyboard Commands
+Follow the instructions in the `README.md` inside each practice directory. Most standalone Python nodes can be started with `python3`, while the launch-file practice uses `ros2 launch`.
 
-| Key | Action |
-|---|---|
-| ↑ | Move forward |
-| ↓ | Move backward |
-| ← | Rotate counterclockwise |
-| → | Rotate clockwise |
-
-### 5.4 Communication Principle
-
-The keyboard teleoperation program is an existing ROS2 executable.
-
-It converts keyboard inputs into velocity commands and publishes them to `/turtle1/cmd_vel`.
-
-```text
-Keyboard Input
-      |
-      v
-turtle_teleop_key
-      |
-      | geometry_msgs/msg/Twist
-      v
-/turtle1/cmd_vel
-      |
-      v
-   turtlesim
-      |
-      v
- Turtle Movement
-```
-
-The turtle moves according to the received velocity commands.
-
-Unlike the keyboard teleoperation node, the automatic controller in the next section is implemented directly in Python.
-
-## 6. Automatic Turtle Control Using Python
-
-A custom Publisher node was implemented to control the turtle automatically.
-
-The controller continuously publishes linear and angular velocity commands to produce circular motion.
-
-### 6.1 Run the Controller
-
-Keep the Turtlesim simulator running.
-
-Stop keyboard teleoperation using `Ctrl+C` before starting the custom controller.
-
-**Terminal 2**
+Example:
 
 ```bash
-source /opt/ros/jazzy/setup.bash
-export ROS_DOMAIN_ID=13
-
-cd ~/ros2_practice/02_turtlesim_control
-python3 turtle_controller.py
+cd 01_publisher_subscriber
+python3 publisher.py
 ```
 
-### 6.2 Core Implementation
+Run the corresponding subscriber in another terminal with the same ROS2 environment configured.
 
-```python
-import rclpy
-from rclpy.node import Node
-from geometry_msgs.msg import Twist
+## Useful ROS2 Commands
 
-
-class TurtleController(Node):
-    def __init__(self):
-        super().__init__('turtle_controller')
-
-        self.publisher = self.create_publisher(
-            Twist,
-            '/turtle1/cmd_vel',
-            10
-        )
-
-        self.timer = self.create_timer(
-            0.1,
-            self.move_turtle
-        )
-
-    def move_turtle(self):
-        msg = Twist()
-
-        msg.linear.x = 2.0
-        msg.angular.z = 1.0
-
-        self.publisher.publish(msg)
+```bash
+ros2 node list
+ros2 topic list
+ros2 topic echo /topic_name
+ros2 topic info /topic_name
+ros2 service list
+ros2 service type /service_name
+ros2 param list
+ros2 param get /node_name parameter_name
 ```
 
-### 6.3 Code Explanation
+## Long-Term Goal
 
-**Creating the Node**
+The long-term goal is to apply these ROS2 fundamentals to a robotics capstone project integrating:
 
-```python
-super().__init__('turtle_controller')
-```
+- A ROS2-based mobile robot
+- Camera-based object detection
+- Robotic arm control
+- Reinforcement learning for motion and control optimization
 
-Initializes the ROS2 node with the name `turtle_controller`.
+Future practices will gradually connect ROS2 communication and control concepts to real robotic systems.
 
-**Creating the Publisher**
+## Progress
 
-```python
-self.publisher = self.create_publisher(
-    Twist,
-    '/turtle1/cmd_vel',
-    10
-)
-```
+**Current scope:** Practices 01–05 (Publisher/Subscriber → Turtlesim → Service/Client → Parameters → Launch Files).
 
-| Parameter | Description |
-|---|---|
-| `Twist` | Velocity message type |
-| `/turtle1/cmd_vel` | Topic used to send motion commands |
-| `10` | QoS history depth using the default QoS profile |
-
-**Creating the Timer**
-
-```python
-self.timer = self.create_timer(
-    0.1,
-    self.move_turtle
-)
-```
-
-This timer calls `move_turtle()` approximately every 0.1 seconds.
-
-The theoretical publishing frequency is calculated as:
-
-$$
-f = \frac{1}{T}
-$$
-
-where:
-
-- $f$: Publishing frequency in Hz
-- $T
+This is an ongoing learning repository. New implementations and documentation will be added as each practice progresses.
