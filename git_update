@@ -1,0 +1,7 @@
+cd ~/ros2_practice
+
+git status
+git add .
+git diff --cached --stat
+git commit -m "Update ROS2 practices and documentation"
+git push origin main
