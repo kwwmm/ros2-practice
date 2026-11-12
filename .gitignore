@@ -83,3 +83,7 @@ datasets/
 # Gazebo / Simulation cache
 .gazebo/
 .gz/
+
+
+# Editor backup
+*~
